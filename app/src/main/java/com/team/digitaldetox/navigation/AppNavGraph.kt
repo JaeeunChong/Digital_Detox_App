@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import java.time.LocalTime
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -20,6 +21,8 @@ import com.team.digitaldetox.feature.world.WorldScreen
 @Composable
 fun AppNavGraph() {
     val navController = rememberNavController()
+    // Capture the device-local launch hour before onboarding; preserve it on recreation.
+    val launchHour = rememberSaveable { LocalTime.now().hour }
     // 초기 데모에서는 앱을 재실행할 때 온보딩이 다시 나옵니다.
     // 추후 DataStore에 온보딩 완료 여부/닉네임/캐릭터를 저장하세요.
     var nickname by rememberSaveable { mutableStateOf("") }
@@ -43,13 +46,16 @@ fun AppNavGraph() {
             })
         }
         composable("home") {
-            // 기존 테스트 홈 화면은 그대로 사용합니다.
-            // 추후 nickname/character를 홈 화면에 전달해도 됩니다.
+            // Preserve all feature routes while showing D's forest interaction.
+            // Onboarding owns the selected player character and nickname.
             HomeScreen(
                 onUsageClick = { navController.navigate("usage") },
                 onActivityClick = { navController.navigate("activity") },
                 onWorldClick = { navController.navigate("world") },
-                onInteractionClick = { navController.navigate("interaction") }
+                onInteractionClick = { navController.navigate("interaction") },
+                nickname = nickname,
+                character = character,
+                launchHour = launchHour
             )
         }
         composable("usage") { UsageScreen(onBack = { navController.popBackStack() }) }
