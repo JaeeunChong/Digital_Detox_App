@@ -3,11 +3,6 @@ package com.team.digitaldetox.feature.home
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.draw.clip
-import com.team.digitaldetox.feature.interaction.ForestHomeContent
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
@@ -16,25 +11,21 @@ fun HomeScreen(
     onUsageClick: () -> Unit,
     onActivityClick: () -> Unit,
     onWorldClick: () -> Unit,
-    onInteractionClick: () -> Unit,
-    nickname: String,
-    character: String,
-    launchHour: Int
+    onInteractionClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .safeDrawingPadding()
-            .verticalScroll(rememberScrollState())
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        ForestHomeContent(
-            nickname = nickname,
-            character = character,
-            launchHour = launchHour,
-            modifier = Modifier.fillMaxWidth().height(440.dp).clip(RoundedCornerShape(24.dp))
+        Text(
+            "Digital Detox",
+            style = MaterialTheme.typography.headlineMedium
         )
+
+        Text("공통 개발 환경 테스트")
 
         Button(onClick = onUsageClick) {
             Text("A. 디지털 디톡스")
