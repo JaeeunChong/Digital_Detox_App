@@ -1,6 +1,7 @@
 package com.team.digitaldetox.feature.onboarding
 
 import android.app.TimePickerDialog
+import com.team.digitaldetox.feature.usage.SleepScheduleRepository
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.BorderStroke
@@ -370,11 +371,14 @@ private fun OnboardingScaffold(
 
 @Composable
 fun SleepSetupScreen(onNext: () -> Unit) {
-    var sleepHour by rememberSaveable { mutableStateOf(23) }
-    var sleepMinute by rememberSaveable { mutableStateOf(0) }
-    var wakeHour by rememberSaveable { mutableStateOf(7) }
-    var wakeMinute by rememberSaveable { mutableStateOf(0) }
     val context = LocalContext.current
+    val storedSleepTime = remember(context) {
+        SleepScheduleRepository(context).getSchedule()
+    }
+    var sleepHour by rememberSaveable { mutableStateOf(storedSleepTime.bedHour) }
+    var sleepMinute by rememberSaveable { mutableStateOf(storedSleepTime.bedMinute) }
+    var wakeHour by rememberSaveable { mutableStateOf(storedSleepTime.wakeHour) }
+    var wakeMinute by rememberSaveable { mutableStateOf(storedSleepTime.wakeMinute) }
 
     OnboardingScaffold(stage = 1) {
         DesignImage("icon_sleep", "🌙", Modifier.size(90.dp), 52)
@@ -407,11 +411,12 @@ fun SleepSetupScreen(onNext: () -> Unit) {
         Spacer(Modifier.weight(1f))
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(3.dp),
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             DesignImage("icon_rabbit", "🐰", Modifier.size(94.dp), 55)
-            Box(Modifier.weight(1f)) {
+            Spacer(Modifier.width(5.dp))
+            Box(Modifier.width(185.dp)) {
                 Box(
                     Modifier.fillMaxWidth()
                         .clip(RoundedCornerShape(22.dp))
@@ -429,7 +434,15 @@ fun SleepSetupScreen(onNext: () -> Unit) {
             }
         }
         Spacer(Modifier.weight(.8f))
-        NextImageButton(onClick = onNext)
+        NextImageButton(onClick = {
+            SleepScheduleRepository(context).save(
+                bedHour = sleepHour,
+                bedMinute = sleepMinute,
+                wakeHour = wakeHour,
+                wakeMinute = wakeMinute
+            )
+            onNext()
+        })
     }
 }
 
