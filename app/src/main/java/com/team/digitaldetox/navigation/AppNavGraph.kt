@@ -43,8 +43,6 @@ fun AppNavGraph() {
             })
         }
         composable("home") {
-            // 기존 테스트 홈 화면은 그대로 사용합니다.
-            // 추후 nickname/character를 홈 화면에 전달해도 됩니다.
             HomeScreen(
                 onUsageClick = { navController.navigate("usage") },
                 onActivityClick = { navController.navigate("activity") },
