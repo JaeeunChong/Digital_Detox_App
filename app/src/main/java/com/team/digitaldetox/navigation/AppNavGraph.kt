@@ -54,7 +54,9 @@ fun AppNavGraph() {
         }
         composable("usage") { UsageScreen(onBack = { navController.popBackStack() }) }
         composable("activity") { ActivityScreen(onBack = { navController.popBackStack() }) }
-        composable("world") { WorldScreen(onBack = { navController.popBackStack() }) }
+        composable("world") {
+            WorldScreen(onBack = { navController.popBackStack() }, character = character)
+        }
         composable("interaction") { InteractionScreen(onBack = { navController.popBackStack() }) }
     }
 }
