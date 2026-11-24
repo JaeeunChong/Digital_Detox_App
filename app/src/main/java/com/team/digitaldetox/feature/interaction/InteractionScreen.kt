@@ -34,6 +34,12 @@ fun InteractionScreen(onBack: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text("D. 캐릭터 상호작용", style = MaterialTheme.typography.headlineMedium)
+        Text("동물 주민", style = MaterialTheme.typography.titleLarge)
+        Text("주민별 미션 성공 버튼으로 대사와 보상을 확인해 보세요.")
+        Resident.entries.forEach { resident ->
+            ResidentReactionCard(resident)
+        }
+        Text("메인 캐릭터", style = MaterialTheme.typography.titleLarge)
         Text("캐릭터를 누르면 5개 대사 중 하나가 나와요. 다시 누르면 다른 대사를 들려줘요.")
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FilterChip(selected = character == "boy", onClick = { character = "boy" }, label = { Text("남자 캐릭터") })
